@@ -1,7 +1,8 @@
-import joplin from 'api';
+import joplin from "api";
+import { settings } from "./settings";
 
 joplin.plugins.register({
-	onStart: async function() {
-		console.info('Hello world. Test plugin started!');
-	},
+  onStart: async function () {
+    await settings.register();
+  },
 });
