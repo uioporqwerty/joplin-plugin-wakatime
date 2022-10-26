@@ -15,6 +15,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.11.0
 
       - name: Extract version from tag
         if: startsWith(github.ref, 'refs/tags/')
