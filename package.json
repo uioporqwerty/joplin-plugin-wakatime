@@ -4,7 +4,6 @@
   "scripts": {
     "dist": "webpack --joplin-plugin-config buildMain && webpack --joplin-plugin-config buildExtraScripts && webpack --joplin-plugin-config createArchive",
     "dist:dev": "webpack -d --joplin-plugin-config buildMain && webpack -d --joplin-plugin-config buildExtraScripts && webpack -d --joplin-plugin-config createArchive && /Applications/Joplin.app/Contents/MacOS/Joplin --env dev",
-    "prepare": "npm run dist",
     "update": "npm install -g generator-joplin && yo joplin --update"
   },
   "license": "MIT",
