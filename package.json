@@ -19,7 +19,6 @@
     "child_process": false
   },
   "devDependencies": {
-    "@types/jszip": "^3.4.1",
     "@types/node": "^14.0.14",
     "chalk": "^4.1.0",
     "copy-webpack-plugin": "^6.1.0",
