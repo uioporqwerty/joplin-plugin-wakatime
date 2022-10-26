@@ -16,7 +16,7 @@ export namespace settings {
     PLUGIN_SETTINGS[WAKATIME_API_KEY] = {
       public: true,
       type: SettingItemType.String,
-      label: "WakaTime API Key",
+      label: "WakaTime API Key (Requires Restart)",
       value: "",
       section: SECTION,
     };

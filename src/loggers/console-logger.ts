@@ -2,7 +2,7 @@ import { LogLevel } from "../constants";
 import { Logger } from "./logger";
 
 export class ConsoleLogger implements Logger {
-  private level: LogLevel;
+  public level: LogLevel;
 
   constructor(level: LogLevel) {
     this.setLevel(level);

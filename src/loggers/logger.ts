@@ -1,6 +1,8 @@
 import { LogLevel } from "../constants";
 
 export interface Logger {
+  level: LogLevel;
+
   getLevel(): LogLevel;
   setLevel(level: LogLevel): void;
   log(level: LogLevel, msg: string): void;

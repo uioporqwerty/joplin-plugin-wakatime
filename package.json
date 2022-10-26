@@ -13,6 +13,10 @@
   "files": [
     "publish"
   ],
+  "browser": {
+    "fs": false,
+    "child_process": false
+  },
   "devDependencies": {
     "@types/jszip": "^3.4.1",
     "@types/node": "^14.0.14",
