@@ -16,12 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 17
-
-      - run: export NODE_OPTIONS=--openssl-legacy-provider
-
       - name: Extract version from tag
         if: startsWith(github.ref, 'refs/tags/')
         uses: damienaicheh/extract-version-from-tag-action@v1.0.0
