@@ -35,7 +35,10 @@ jobs:
           sed -i "s/PLUGIN_VERSION/1.0.0/" ./src/config.ts
 
       - name: Install node packages and build archive
-        run: npm install
+        run: |
+          node --version
+          npm --version
+          npm install
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
