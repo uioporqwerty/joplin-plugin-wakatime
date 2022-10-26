@@ -331,7 +331,6 @@ let exportedConfigs = [];
 
 try {
   exportedConfigs = main(process.argv);
-  exportedConfigs["experiments"] = { futureDefaults: true };
 } catch (error) {
   console.error(chalk.red(error.message));
   process.exit(1);
