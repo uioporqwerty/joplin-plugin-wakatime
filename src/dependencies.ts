@@ -4,7 +4,7 @@ import * as path from "path";
 
 import { ConsoleLogger } from "./loggers/console-logger";
 const fs = joplin.require("fs-extra");
-const JSZip = require("JSZip");
+import JSZip = require("JSZip");
 
 export class Dependencies {
   private logger: ConsoleLogger;
