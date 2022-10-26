@@ -39,12 +39,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Upload plugin
-        uses: actions/upload-artifact@v2
-        with:
-          name: joplin-plugin-wakatime
-          path: node_modules
-
       - name: Build archive
         run: npm run dist
 
