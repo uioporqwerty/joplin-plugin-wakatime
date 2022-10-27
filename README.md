@@ -1,24 +1,33 @@
-# Joplin Plugin
+# Wakatime for Joplin
 
-This is a template to create a new Joplin plugin.
+[![Build and Deploy](https://github.com/uioporqwerty/joplin-plugin-wakatime/actions/workflows/build.yml/badge.svg)](https://github.com/uioporqwerty/joplin-plugin-wakatime/actions/workflows/build.yml)
 
-The main two files you will want to look at are:
+This is a Joplin integration for (WakaTime)[https://wakatime.com].
 
-- `/src/index.ts`, which contains the entry point for the plugin source code.
-- `/src/manifest.json`, which is the plugin manifest. It contains information such as the plugin a name, version, etc.
+## Usage
 
-## Building the plugin
+Enter your WakaTime API key in the Joplin settings page for this plugin and restart the Joplin application. As you start typing in a note for Joplin, you will see your stats broken down by notebook in the WakaTime dashboard.
 
-The plugin is built using Webpack, which creates the compiled code in `/dist`. A JPL archive will also be created at the root, which can use to distribute the plugin.
+## Supporting the Author
 
-To build the plugin, simply run `npm run dist`.
+The creator of this integration supports effective altruism. Please consider a donation to the EA Funds on the Giving What We Can website.
+<br/><br/>
 
-The project is setup to use TypeScript, although you can change the configuration to use plain JavaScript.
+<a href="https://www.givingwhatwecan.org/donate/organizations" class="donate">Donate</a>
 
-## Updating the plugin framework
-
-To update the plugin framework, run `npm run update`.
-
-In general this command tries to do the right thing - in particular it's going to merge the changes in package.json and .gitignore instead of overwriting. It will also leave "/src" as well as README.md untouched.
-
-The file that may cause problem is "webpack.config.js" because it's going to be overwritten. For that reason, if you want to change it, consider creating a separate JavaScript file and include it in webpack.config.js. That way, when you update, you only have to restore the line that include your file.
+<style>
+    .donate {
+        font-family: "Metropolis,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji";
+        border-radius: .5em;
+        text-decoration: none;
+        color: white;
+        letter-spacing: .05em;
+        line-height: 1.5em;
+        font-weight: 700;
+        font-size: 1em;
+        text-align: center;
+        background-color: #BA175B;
+        width: fit-content;
+        padding: .75rem 1.5rem .75rem 1.5rem;
+    }
+</style>
