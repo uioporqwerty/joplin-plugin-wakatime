@@ -38,6 +38,7 @@
     "@types/which": "^2.0.1",
     "compare-versions": "^5.0.1",
     "jszip": "^3.10.1",
+    "mixpanel-browser": "^2.45.0",
     "request": "^2.88.2",
     "rollbar": "^2.25.2",
     "which": "^2.0.2"

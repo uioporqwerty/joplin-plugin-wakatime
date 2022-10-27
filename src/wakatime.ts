@@ -4,6 +4,7 @@ import { Dependencies } from "./dependencies";
 import { WAKATIME_API_KEY } from "./constants";
 import { Logger } from "./loggers/logger";
 import { quote, validateKey } from "./utilities";
+import { Analytics } from "./analytics";
 
 interface FileSelection {
   lastHeartbeatAt: number;
@@ -19,16 +20,18 @@ export class WakaTime {
   private lastFile: string;
   private lastHeartbeat: number = 0;
   private dependencies: Dependencies;
+  private analytics: Analytics;
   private logger: Logger;
   private dedupe: FileSelectionMap = {};
   private notes: Record<string, string> = {};
 
-  constructor(logger: Logger) {
+  constructor(logger: Logger, analytics: Analytics) {
     this.logger = logger;
+    this.analytics = analytics;
   }
 
   public initialize(): void {
-    this.dependencies = new Dependencies(this.logger);
+    this.dependencies = new Dependencies(this.logger, this.analytics);
     this.hasApiKey(async (hasApiKey: boolean) => {
       if (hasApiKey) {
         this.logger.debug("Setting up event listeners");
