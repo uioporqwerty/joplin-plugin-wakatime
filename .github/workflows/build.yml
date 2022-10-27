@@ -22,7 +22,7 @@ jobs:
 
       - name: Install jq
         if: startsWith(github.ref, 'refs/tags/')
-        run: brew install jq
+        run: apt-get install jq -y
 
       - name: Decrypt sensitive files
         run: |
