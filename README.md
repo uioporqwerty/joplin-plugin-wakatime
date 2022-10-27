@@ -13,4 +13,4 @@ Enter your WakaTime API key in the Joplin settings page for this plugin and rest
 The creator of this integration supports effective altruism. Please consider a donation to the EA Funds on the Giving What We Can website. Click below to get started.
 <br/><br/>
 
-<a href="https://www.givingwhatwecan.org/donate/organizations">![Donate](./images/giving-what-we-can.png)</a>
+<a href="https://www.givingwhatwecan.org/donate/organizations" target="_blank">![Donate](./images/giving-what-we-can.png)</a>
