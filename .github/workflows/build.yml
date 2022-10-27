@@ -20,10 +20,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: damienaicheh/extract-version-from-tag-action@v1.0.0
 
-      - name: Install jq
-        #if: startsWith(github.ref, 'refs/tags/')
-        run: sudo apt-get install jq -y
-
       - name: Decrypt sensitive files
         run: |
           gpg -d --passphrase "${{ secrets.GPG_PASSPHRASE }}" --batch ./src/config.ts.asc > ./src/config.ts
