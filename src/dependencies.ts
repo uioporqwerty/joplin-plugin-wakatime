@@ -4,10 +4,12 @@ import * as path from "path";
 import * as JSZip from "jszip";
 
 import { ConsoleLogger } from "./loggers/console-logger";
+import { Analytics } from "./analytics";
 const fs = joplin.require("fs-extra");
 
 export class Dependencies {
   private logger: ConsoleLogger;
+  private analytics: Analytics;
   private resourcesLocation?: string = undefined;
   private githubDownloadPrefix =
     "https://github.com/wakatime/wakatime-cli/releases/download";
@@ -15,8 +17,9 @@ export class Dependencies {
     "https://api.github.com/repos/wakatime/wakatime-cli/releases/latest";
   private latestCliVersion: string = "";
 
-  constructor(logger: ConsoleLogger) {
+  constructor(logger: ConsoleLogger, analytics: Analytics) {
     this.logger = logger;
+    this.analytics = analytics;
   }
 
   checkAndInstall(callback?: () => void): void {
