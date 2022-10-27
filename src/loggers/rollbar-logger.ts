@@ -12,6 +12,7 @@ export class RollbarLogger implements Logger {
       accessToken: Config.rollbarAccessToken,
       captureUncaught: true,
       captureUnhandledRejections: true,
+      environment: "Production",
     });
     this.setLevel(level);
   }

@@ -153,7 +153,6 @@ export class Dependencies {
         if (!Dependencies.isWindows()) {
           try {
             this.logger.debug("Chmod 755 wakatime-cli...");
-            debugger;
             fs.chmodSync(this.getCliLocation(), 0o755);
           } catch (e) {
             this.logger.warnException(e);

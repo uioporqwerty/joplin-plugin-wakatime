@@ -8,7 +8,7 @@ export namespace settings {
   export async function register() {
     await joplin.settings.registerSection(SECTION, {
       label: "WakaTime",
-      iconName: "fas fa-tools",
+      iconName: "fas fa-clock",
     });
 
     let PLUGIN_SETTINGS: Record<string, SettingItem> = {};
