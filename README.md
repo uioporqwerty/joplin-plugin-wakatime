@@ -2,7 +2,7 @@
 
 [![Build and Deploy](https://github.com/uioporqwerty/joplin-plugin-wakatime/actions/workflows/build.yml/badge.svg)](https://github.com/uioporqwerty/joplin-plugin-wakatime/actions/workflows/build.yml)
 
-This is a Joplin integration for (WakaTime)[https://wakatime.com].
+This is a Joplin integration for [WakaTime](https://wakatime.com).
 
 ## Usage
 
