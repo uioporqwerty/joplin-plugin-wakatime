@@ -39,27 +39,27 @@ jobs:
       - name: Set package.json version
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          echo $(cat ./package.json | jq '.version = "$MAJOR.$MINOR.$PATCH"' ./package.json) > ./package.json
+          echo $(cat ./package.json | jq '.version = "${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"' ./package.json) > ./package.json
 
       - name: Commit package.json
         if: startsWith( github.ref, 'refs/tags/')
         uses: test-room-7/action-update-file@v1
         with:
           file-path: package.json
-          commit-msg: "Update package.json version to $MAJOR.$MINOR.$PATCH"
+          commit-msg: "Update package.json version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
           github-token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Set manifest.json version
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          echo $(cat ./src/manifest.json | jq '.version = "$MAJOR.$MINOR.$PATCH"' ./src/manifest.json) > ./src/manifest.json
+          echo $(cat ./src/manifest.json | jq '.version = "${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"' ./src/manifest.json) > ./src/manifest.json
 
       - name: Commit manifest.json
         if: startsWith( github.ref, 'refs/tags/')
         uses: test-room-7/action-update-file@v1
         with:
           file-path: src/manifest.json
-          commit-msg: "Update manfiest.json version to $MAJOR.$MINOR.$PATCH"
+          commit-msg: "Update manfiest.json version to ${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
           github-token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Install dependencies
