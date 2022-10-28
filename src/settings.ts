@@ -18,6 +18,7 @@ export namespace settings {
       type: SettingItemType.String,
       label: "WakaTime API Key (Requires Restart)",
       value: "",
+      secure: true,
       section: SECTION,
     };
 
