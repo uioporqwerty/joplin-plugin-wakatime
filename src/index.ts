@@ -1,7 +1,7 @@
 import joplin from "api";
 import Config from "./config";
 import { compareVersions } from "compare-versions";
-import { LogLevel, WAKATIME_API_KEY } from "./constants";
+import { ANALYTICS, LogLevel, WAKATIME_API_KEY } from "./constants";
 import { Dependencies } from "./dependencies";
 import { Environment, getEnvironment } from "./environment";
 import { ConsoleLogger } from "./loggers/console-logger";
@@ -22,6 +22,7 @@ joplin.plugins.register({
       : new RollbarLogger(LogLevel.WARN);
 
     let analytics = new Analytics();
+
     joplin.settings.onChange((event) => {
       event.keys.forEach((key) => {
         if (key == WAKATIME_API_KEY) {

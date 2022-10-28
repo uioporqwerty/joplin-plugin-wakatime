@@ -16,4 +16,12 @@ export class Analytics {
   trackEvent(name: string, props: Record<string, any> = undefined): void {
     mixpanel.track(name, { ...this.defaultProps, props });
   }
+
+  disable() {
+    mixpanel.opt_out_tracking();
+  }
+
+  enabled() {
+    mixpanel.opt_in_tracking();
+  }
 }
