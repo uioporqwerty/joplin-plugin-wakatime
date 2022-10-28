@@ -5,6 +5,7 @@ import { WAKATIME_API_KEY } from "./constants";
 import { Logger } from "./loggers/logger";
 import { quote, validateKey } from "./utilities";
 import { Analytics } from "./analytics";
+import Config from "./config";
 
 interface FileSelection {
   lastHeartbeatAt: number;
@@ -48,6 +49,7 @@ export class WakaTime {
           has_more = userNotes.has_more;
           page += 1;
         }
+
         this.setupEventListeners();
       }
     });
@@ -65,7 +67,13 @@ export class WakaTime {
 
   private setupEventListeners(): void {
     joplin.workspace.onNoteChange(async (handler) => {
-      this.onChange();
+      if (handler.event == 1) {
+        const note = await joplin.workspace.selectedNote();
+        this.logger.debug(`New note ${note.id} created. Adding to notes.`);
+        this.notes[note.id] = "";
+      } else {
+        this.onChange();
+      }
     });
 
     joplin.workspace.onNoteSelectionChange((event) => {
@@ -114,7 +122,7 @@ export class WakaTime {
     let folder = await joplin.workspace.selectedFolder();
     let apiKey: string = await joplin.settings.value(WAKATIME_API_KEY);
 
-    let user_agent = this.agentName;
+    let user_agent = `${this.agentName}/joplin-wakatime/${Config.pluginVersion}`;
     let args = [
       "--entity",
       file,
@@ -125,6 +133,8 @@ export class WakaTime {
       "--hide-branch-names",
       "--key",
       quote(apiKey),
+      "--category",
+      "designing", // TODO: Replace with a different category once the cli allows.
     ];
 
     let project = folder.title;
