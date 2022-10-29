@@ -128,7 +128,6 @@ export class WakaTime {
       quote(user_agent),
       "--entity-type",
       "app",
-      "--hide-branch-names",
       "--key",
       quote(apiKey),
       "--category",
