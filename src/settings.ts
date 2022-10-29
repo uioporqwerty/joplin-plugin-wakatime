@@ -1,12 +1,26 @@
 import joplin from "api";
 import { SettingItem, SettingItemType } from "api/types";
+import { Analytics } from "./analytics";
 import { ANALYTICS, WAKATIME_API_KEY } from "./constants";
+import { Logger } from "./loggers/logger";
 
-export namespace settings {
-  const SECTION = "WakaTime";
+export class Settings {
+  private SECTION = "WakaTime";
+  private logger: Logger;
+  private analytics: Analytics;
 
-  export async function register() {
-    await joplin.settings.registerSection(SECTION, {
+  constructor(logger: Logger, analytics: Analytics) {
+    this.logger = logger;
+    this.analytics = analytics;
+  }
+
+  async initialize(): Promise<void> {
+    await this.register();
+    await this.setupEventListeners();
+  }
+
+  private async register(): Promise<void> {
+    await joplin.settings.registerSection(this.SECTION, {
       label: "WakaTime",
       iconName: "fas fa-clock",
       description:
@@ -22,7 +36,7 @@ export namespace settings {
       description: "Requires restart",
       value: "",
       secure: true,
-      section: SECTION,
+      section: this.SECTION,
     };
 
     PLUGIN_SETTINGS[ANALYTICS] = {
@@ -32,22 +46,26 @@ export namespace settings {
       description:
         "Analytics allow the plugin developer to track how the plugin is being used. Notes and other personal data is not tracked.",
       value: true,
-      section: SECTION,
+      section: this.SECTION,
     };
 
     await joplin.settings.registerSettings(PLUGIN_SETTINGS);
   }
 
-  export async function setupEventListeners() {
+  private async setupEventListeners(): Promise<void> {
     await joplin.settings.onChange((handler) => {
       handler.keys.forEach(async (key) => {
+        this.logger.debug(`Setting value changed for ${key}`);
+
         if (key == ANALYTICS) {
           let enabled = await joplin.settings.value(ANALYTICS);
           if (!enabled) {
-            this.disable();
+            this.analytics.disable();
           } else {
-            this.enabled();
+            this.analytics.enabled();
           }
+        } else if (key == WAKATIME_API_KEY) {
+          this.analytics.trackEvent("WakaTime API Key Entered");
         }
       });
     });

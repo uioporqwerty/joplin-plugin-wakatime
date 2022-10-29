@@ -8,9 +8,9 @@ import { ConsoleLogger } from "./loggers/console-logger";
 import { Logger } from "./loggers/logger";
 import { RollbarLogger } from "./loggers/rollbar-logger";
 import { AppInformation } from "./models/app-information";
-import { settings } from "./settings";
 import { WakaTime } from "./wakatime";
 import { Analytics } from "./analytics";
+import { Settings } from "./settings";
 
 joplin.plugins.register({
   onStart: async function () {
@@ -22,15 +22,7 @@ joplin.plugins.register({
       : new RollbarLogger(LogLevel.WARN);
 
     let analytics = new Analytics();
-
-    joplin.settings.onChange((event) => {
-      event.keys.forEach((key) => {
-        if (key == WAKATIME_API_KEY) {
-          analytics.trackEvent("WakaTime API Key Entered");
-        }
-      });
-    });
-
+    let settings = new Settings(logger, analytics);
     const appInformationUrl =
       "https://raw.githubusercontent.com/uioporqwerty/joplin-plugin-wakatime/main/app-information.json";
 
@@ -53,7 +45,7 @@ joplin.plugins.register({
       logger.error(error.message);
     }
 
-    await settings.register();
+    await settings.initialize();
 
     let dependencies = new Dependencies(logger, analytics);
     dependencies.checkAndInstall(() => {
