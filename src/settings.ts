@@ -9,6 +9,8 @@ export namespace settings {
     await joplin.settings.registerSection(SECTION, {
       label: "WakaTime",
       iconName: "fas fa-clock",
+      description:
+        "For support, go to https://github.com/uioporqwerty/joplin-plugin-wakatime/issues",
     });
 
     let PLUGIN_SETTINGS: Record<string, SettingItem> = {};
@@ -16,7 +18,8 @@ export namespace settings {
     PLUGIN_SETTINGS[WAKATIME_API_KEY] = {
       public: true,
       type: SettingItemType.String,
-      label: "WakaTime API Key (Requires Restart)",
+      label: "WakaTime API Key",
+      description: "Requires restart",
       value: "",
       secure: true,
       section: SECTION,
