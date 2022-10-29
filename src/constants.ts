@@ -2,8 +2,14 @@ export const WAKATIME_API_KEY = "wakatimeAPIKey";
 export const ANALYTICS = "analytics";
 
 export enum LogLevel {
-  DEBUG = 0,
+  DEBUG,
   INFO,
   WARN,
   ERROR,
+}
+
+export enum JoplinEventType {
+  CREATED = 1,
+  UPDATED,
+  DELETED,
 }

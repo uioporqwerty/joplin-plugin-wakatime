@@ -1,9 +1,9 @@
 import joplin from "api";
 import * as child_process from "child_process";
 import { Dependencies } from "./dependencies";
-import { WAKATIME_API_KEY } from "./constants";
+import { JoplinEventType, WAKATIME_API_KEY } from "./constants";
 import { Logger } from "./loggers/logger";
-import { quote, validateKey } from "./utilities";
+import { quote, validAPIKey } from "./utilities";
 import { Analytics } from "./analytics";
 import Config from "./config";
 
@@ -31,67 +31,65 @@ export class WakaTime {
     this.analytics = analytics;
   }
 
-  public initialize(): void {
+  public async initialize(): Promise<void> {
     this.dependencies = new Dependencies(this.logger, this.analytics);
-    this.hasApiKey(async (hasApiKey: boolean) => {
-      if (hasApiKey) {
-        this.logger.debug("Setting up event listeners");
-        var page = 1;
-        var has_more = true;
-        while (has_more) {
-          let userNotes = await joplin.data.get(["notes"], {
-            fields: ["title", "id"],
-            page,
-          });
-          userNotes.items.forEach((note) => {
-            this.notes[note.id] = note.title;
-          });
-          has_more = userNotes.has_more;
-          page += 1;
-        }
-
-        this.setupEventListeners();
-      }
-    });
+    if (await this.hasApiKey()) {
+      this.logger.debug("Setting up event listeners");
+      await this.populateNotes();
+      this.setupEventListeners();
+    }
   }
 
-  private hasApiKey(callback: (arg0: boolean) => void): void {
-    joplin.settings
-      .value(WAKATIME_API_KEY)
-      .then((apiKey: string) => callback(validateKey(apiKey) === ""))
-      .catch((err) => {
-        this.logger.error(`Error reading api key: ${err}`);
-        callback(false);
+  private async populateNotes(): Promise<void> {
+    var page = 1;
+    var has_more = true;
+    while (has_more) {
+      let userNotes = await joplin.data.get(["notes"], {
+        fields: ["title", "id"],
+        page,
       });
+      userNotes.items.forEach(
+        (note: { id: string | number; title: string }) => {
+          this.notes[note.id] = note.title;
+        }
+      );
+      has_more = userNotes.has_more;
+      page += 1;
+    }
+  }
+
+  private async hasApiKey(): Promise<boolean> {
+    const apiKey = await joplin.settings.value(WAKATIME_API_KEY);
+    return Promise.resolve(validAPIKey(apiKey));
   }
 
   private setupEventListeners(): void {
     joplin.workspace.onNoteChange(async (handler) => {
-      if (handler.event == 1) {
+      if (handler.event.valueOf() == JoplinEventType.CREATED.valueOf()) {
         const note = await joplin.workspace.selectedNote();
         this.logger.debug(`New note ${note.id} created. Adding to notes.`);
         this.notes[note.id] = "";
       } else {
-        this.onChange();
+        await this.onChange();
       }
     });
 
-    joplin.workspace.onNoteSelectionChange((event) => {
-      this.onChange();
+    joplin.workspace.onNoteSelectionChange(async (_: any) => {
+      await this.onChange();
     });
 
     // Missing on save. Where to get it in joplin?
   }
 
-  private onChange(): void {
-    this.onEvent(false);
+  private onChange(): Promise<void> {
+    return this.onEvent(false);
   }
 
-  private onSave(): void {
-    this.onEvent(true);
+  private onSave(): Promise<void> {
+    return this.onEvent(true);
   }
 
-  private async onEvent(isWrite: boolean) {
+  private async onEvent(isWrite: boolean): Promise<void> {
     let note = await joplin.workspace.selectedNote();
     if (this.notes[note.id] != note.title) {
       // Title is being changed
@@ -102,17 +100,17 @@ export class WakaTime {
     let file: string = note.title;
     let time: number = Date.now();
     if (isWrite || this.enoughTimePassed(time) || this.lastFile !== file) {
-      this.sendHeartbeat(file, time, isWrite);
+      await this.sendHeartbeat(file, time, isWrite);
       this.lastFile = file;
       this.lastHeartbeat = time;
     }
   }
 
-  private sendHeartbeat(file: string, time: number, isWrite: boolean): void {
-    this._sendHeartbeat(file, time, isWrite);
-  }
-
-  private async _sendHeartbeat(file: string, time: number, isWrite: boolean) {
+  private async sendHeartbeat(
+    file: string,
+    time: number,
+    isWrite: boolean
+  ): Promise<void> {
     if (
       !this.dependencies.isCliInstalled() ||
       (isWrite && this.isDuplicateHeartbeat(file, time))
@@ -158,33 +156,39 @@ export class WakaTime {
       options,
       (error, stdout, stderr) => {
         if (error != null) {
-          if (stderr && stderr.toString() != "")
+          if (stderr && stderr.toString() != "") {
             this.logger.error(stderr.toString());
-          if (stdout && stdout.toString() != "")
+          }
+
+          if (stdout && stdout.toString() != "") {
             this.logger.error(stdout.toString());
+          }
+
           this.logger.error(error.toString());
         }
-        this.logger.debug("heartbeat sent");
       }
     );
+
     proc.on("close", (code, _signal) => {
       if (code == 0) {
         let today = new Date();
         this.logger.debug(`last heartbeat sent ${this.formatDate(today)}`);
       } else if (code == 102) {
         this.logger.warn(
-          `Api eror (102); Check your log file for more details`
+          "Api eror (102); Check your log file for more details"
         );
       } else if (code == 103) {
-        let error_msg = `Config parsing error (103); Check your log file for more details`;
-        this.logger.error(error_msg);
+        this.logger.error(
+          "Config parsing error (103); Check your log file for more details"
+        );
       } else if (code == 104) {
-        let error_msg =
-          "Invalid Api Key (104); Make sure your Api Key is correct!";
-        this.logger.error(error_msg);
+        this.logger.error(
+          "Invalid Api Key (104); Make sure your Api Key is correct!"
+        );
       } else {
-        let error_msg = `Unknown Error (${code}); Check your log file for more details`;
-        this.logger.error(error_msg);
+        this.logger.error(
+          `Unknown Error (${code}); Check your log file for more details`
+        );
       }
     });
   }
