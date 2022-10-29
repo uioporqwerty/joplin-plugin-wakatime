@@ -36,7 +36,7 @@ export class WakaTime {
     if (await this.hasApiKey()) {
       this.logger.debug("Setting up event listeners");
       await this.populateNotes();
-      this.setupEventListeners();
+      await this.setupEventListeners();
     }
   }
 
@@ -63,8 +63,8 @@ export class WakaTime {
     return Promise.resolve(validAPIKey(apiKey));
   }
 
-  private setupEventListeners(): void {
-    joplin.workspace.onNoteChange(async (handler) => {
+  private async setupEventListeners(): Promise<void> {
+    await joplin.workspace.onNoteChange(async (handler) => {
       if (handler.event.valueOf() == JoplinEventType.CREATED.valueOf()) {
         const note = await joplin.workspace.selectedNote();
         this.logger.debug(`New note ${note.id} created. Adding to notes.`);
@@ -74,7 +74,7 @@ export class WakaTime {
       }
     });
 
-    joplin.workspace.onNoteSelectionChange(async (_: any) => {
+    await joplin.workspace.onNoteSelectionChange(async (_: any) => {
       await this.onChange();
     });
 
