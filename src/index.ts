@@ -1,7 +1,7 @@
 import joplin from "api";
 import Config from "./config";
 import { compareVersions } from "compare-versions";
-import { ANALYTICS, LogLevel, WAKATIME_API_KEY } from "./constants";
+import { LogLevel } from "./constants";
 import { Dependencies } from "./dependencies";
 import { Environment, getEnvironment } from "./environment";
 import { ConsoleLogger } from "./loggers/console-logger";
@@ -23,6 +23,9 @@ joplin.plugins.register({
 
     let analytics = new Analytics();
     let settings = new Settings(logger, analytics);
+    let wakatime = new WakaTime(logger, analytics);
+    let dependencies = new Dependencies(logger, analytics);
+
     const appInformationUrl =
       "https://raw.githubusercontent.com/uioporqwerty/joplin-plugin-wakatime/main/app-information.json";
 
@@ -47,10 +50,8 @@ joplin.plugins.register({
 
     await settings.initialize();
 
-    let dependencies = new Dependencies(logger, analytics);
     dependencies.checkAndInstall(() => {
       logger.debug("Finished wakatime-cli installation");
-      let wakatime = new WakaTime(logger, analytics);
       wakatime.initialize();
     });
   },
