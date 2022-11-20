@@ -123,7 +123,7 @@ export class WakaTime {
     let user_agent = `${this.agentName}/joplin-wakatime/${Config.pluginVersion}`;
     let args = [
       "--entity",
-      file,
+      quote(file),
       "--plugin",
       quote(user_agent),
       "--entity-type",
@@ -156,14 +156,14 @@ export class WakaTime {
       (error, stdout, stderr) => {
         if (error != null) {
           if (stderr && stderr.toString() != "") {
-            this.logger.error(stderr.toString());
+            this.logger.error(this.obfuscateKeyInError(stderr.toString()));
           }
 
           if (stdout && stdout.toString() != "") {
-            this.logger.error(stdout.toString());
+            this.logger.error(this.obfuscateKeyInError(stdout.toString()));
           }
 
-          this.logger.error(error.toString());
+          this.logger.error(this.obfuscateKeyInError(error.toString()));
         }
       }
     );
@@ -242,6 +242,17 @@ export class WakaTime {
       lastHeartbeatAt: time,
     };
     return duplicate;
+  }
+
+  private obfuscateKeyInError(error: string): string {
+    var parts = error.split(" ");
+    for (let index = 1; index < parts.length; index++) {
+      if (parts[index - 1] === "--key") {
+        parts[index] = this.obfuscateKey(parts[index]);
+      }
+    }
+
+    return parts.join(" ");
   }
 
   private obfuscateKey(key: string): string {
