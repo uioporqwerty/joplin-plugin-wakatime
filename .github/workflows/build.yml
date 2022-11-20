@@ -28,7 +28,7 @@ jobs:
       - name: Modify config for production
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          sed -i "s/{{PLUGIN_VERSION}}/$MAROR.$MINOR.$PATCH/" ./src/config.ts
+          sed -i "s/{{PLUGIN_VERSION}}/$MAJOR.$MINOR.$PATCH/" ./src/config.ts
 
       - name: Modify config for development
         if: startsWith(github.ref, 'refs/tags/') != true
