@@ -120,7 +120,15 @@ export class WakaTime {
     let folder = await joplin.workspace.selectedFolder();
     let apiKey: string = await joplin.settings.value(WAKATIME_API_KEY);
 
-    let user_agent = `${this.agentName}/joplin-wakatime/${Config.pluginVersion}`;
+    var versionNumber = "2.8.8"; //Assumption until new version released with versionInfo API support.
+
+    try {
+      versionNumber = (await joplin.versionInfo()).version;
+    } catch {
+      this.logger.info("Version API not available.");
+    }
+
+    let user_agent = `${this.agentName}/${versionNumber} joplin-wakatime/${Config.pluginVersion}`;
     let args = [
       "--entity",
       quote(file),
