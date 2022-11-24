@@ -37,7 +37,7 @@ joplin.plugins.register({
         appInformation.minimumVersion,
         Config.pluginVersion
       );
-      if (compareResult) {
+      if (compareResult === 1) {
         await joplin.views.dialogs.showMessageBox(
           "WakaTime plugin requires an update. Go to Joplin settings to update the plugin."
         );
