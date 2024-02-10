@@ -136,11 +136,13 @@ export class WakaTime {
       quote(user_agent),
       "--entity-type",
       "app",
-      "--key",
-      quote(apiKey),
       "--category",
       "designing", // TODO: Replace with a different category once the cli allows.
     ];
+
+    if (apiKey) {
+      args.push("--key", quote(apiKey));
+    }
 
     let project = folder.title;
     if (project) {

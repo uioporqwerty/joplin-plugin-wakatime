@@ -33,7 +33,7 @@ export class Settings {
       public: true,
       type: SettingItemType.String,
       label: "WakaTime API Key",
-      description: "Requires restart",
+      description: "Uses ~/.wakatime.cfg if empty. Requires restart",
       value: "",
       secure: true,
       section: this.SECTION,
