@@ -6,7 +6,7 @@ This is a Joplin integration for [WakaTime](https://wakatime.com).
 
 ## Usage
 
-Enter your WakaTime API key in the Joplin settings page for this plugin and restart the Joplin application. As you start typing in a note for Joplin, you will see your stats broken down by notebook in the WakaTime dashboard.
+Enter your WakaTime API key (without "waka_") in the Joplin settings page for this plugin and restart the Joplin application. As you start typing in a note for Joplin, you will see your stats broken down by notebook in the WakaTime dashboard.
 
 ## Supporting the Author
 
